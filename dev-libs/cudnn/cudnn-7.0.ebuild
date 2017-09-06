@@ -13,8 +13,6 @@ else
 	MYD=$(get_version_component_range 1-2)
 fi
 
-einfo "version is ${MYD} from $(get_major_version) and $(get_version_component_range 1-2)"
-
 DESCRIPTION="NVIDIA Accelerated Deep Learning on GPU library"
 HOMEPAGE="https://developer.nvidia.com/cuDNN"
 SRC_URI="cudnn-${CUDA_PV}-linux-x64-v${MYD}.tgz"

@@ -8,10 +8,7 @@ inherit cuda eutils flag-o-matic portability toolchain-funcs unpacker versionato
 MYD=$(get_version_component_range 1-2)
 DRIVER_PV="384.59"
 
-VERSION_CATEGORY="${PR}"
-if [ "${PR}" == "r0" ]; then
-    VERSION_CATEGORY="Prod2"
-fi
+VERSION_CATEGORY="rc"
 
 DESCRIPTION="NVIDIA CUDA Software Development Kit"
 HOMEPAGE="https://developer.nvidia.com/cuda-zone"

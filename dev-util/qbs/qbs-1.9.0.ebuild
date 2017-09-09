@@ -34,7 +34,7 @@ DEPEND="${RDEPEND}
 	test? ( dev-qt/qtdeclarative:5 )
 "
 
-S=${WORKDIR}/${MY_P}
+S=${WORKDIR}/dist/${MY_P}
 
 PATCHES=(
 	# bug 625640

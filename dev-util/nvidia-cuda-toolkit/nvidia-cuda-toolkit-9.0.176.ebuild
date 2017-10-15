@@ -6,9 +6,9 @@ EAPI=6
 inherit check-reqs cuda toolchain-funcs unpacker versionator
 
 MYD=$(get_version_component_range 1-2)
-DRIVER_PV="384.59"
+DRIVER_PV="384.81"
 
-VERSION_CATEGORY="rc"
+VERSION_CATEGORY="Prod"
 
 DESCRIPTION="NVIDIA CUDA Toolkit (compiler and friends)"
 HOMEPAGE="https://developer.nvidia.com/cuda-zone"

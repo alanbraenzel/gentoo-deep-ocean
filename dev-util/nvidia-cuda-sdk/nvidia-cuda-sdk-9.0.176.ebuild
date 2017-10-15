@@ -6,13 +6,13 @@ EAPI=6
 inherit cuda eutils flag-o-matic portability toolchain-funcs unpacker versionator
 
 MYD=$(get_version_component_range 1-2)
-DRIVER_PV="384.59"
+DRIVER_PV="384.81"
 
-VERSION_CATEGORY="rc"
+VERSION_CATEGORY="Prod"
 
 DESCRIPTION="NVIDIA CUDA Software Development Kit"
 HOMEPAGE="https://developer.nvidia.com/cuda-zone"
-SRC_URI="https://developer.nvidia.com/compute/cuda/${MYD}/{$VERSION_CATEGORY}/local_installers/cuda_${PV}_${DRIVER_PV}_linux-run -> cuda_${PV}_${DRIVER_PV}_linux.run"
+SRC_URI="https://developer.nvidia.com/compute/cuda/${MYD}/$VERSION_CATEGORY/local_installers/cuda_${PV}_${DRIVER_PV}_linux-run -> cuda_${PV}_${DRIVER_PV}_linux.run"
 
 LICENSE="CUDPP"
 SLOT="0"

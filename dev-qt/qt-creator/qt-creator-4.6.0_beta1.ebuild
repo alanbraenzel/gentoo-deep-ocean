@@ -51,7 +51,7 @@ CDEPEND="
 	>=dev-qt/qtwidgets-${QT_PV}
 	>=dev-qt/qtx11extras-${QT_PV}
 	>=dev-qt/qtxml-${QT_PV}
-	clangcodemodel? ( >=sys-devel/clang-3.9:= )
+	clangcodemodel? ( >=sys-devel/clang-5.0:= )
 	designer? ( >=dev-qt/designer-${QT_PV} )
 	qbs? ( >=dev-util/qbs-1.9.1 )
 	systemd? ( sys-apps/systemd:= )

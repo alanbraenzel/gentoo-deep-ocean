@@ -4,6 +4,7 @@
 EAPI=7
 
 inherit qmake-utils
+inherit eutils
 
 MY_P=${PN}-src-${PV}
 
@@ -44,7 +45,7 @@ src_prepare() {
 	fi
 
     # apply patch to include missing header file: https://bugreports.qt.io/browse/QBS-1370
-    epatch "${FILESDIR}/${PV}-install_missing_headinstall_missing_header_files.patch"
+    epatch "${FILESDIR}/${PV}-install_missing_headinstall_missing_header_files.patch" || die 
 
 	# the qbsres target uses the newly built qbs binary, so we have to tell it where to find its libraries
 	sed -i -e '/qbsres\.commands =/ a\LD_LIBRARY_PATH=$$shell_quote($$shell_path($$QBS_LIBRARY_DIRNAME)) \\' \

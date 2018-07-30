@@ -1,0 +1,32 @@
+diff --git a/src/lib/corelib/corelib.qbs b/src/lib/corelib/corelib.qbs
+index 08733b624..93509763b 100644
+--- a/src/lib/corelib/corelib.qbs
++++ b/src/lib/corelib/corelib.qbs
+@@ -440,7 +440,6 @@ QbsLibrary {
+             "settingscreator.h",
+             "settingsmodel.cpp",
+             "settingsrepresentation.cpp",
+-            "settingsrepresentation.h",
+             "setupprojectparameters.cpp",
+             "shellutils.cpp",
+             "shellutils.h",
+@@ -475,6 +474,7 @@ QbsLibrary {
+             "qbs_export.h",
+             "settings.h",
+             "settingsmodel.h",
++            "settingsrepresentation.h",
+             "setupprojectparameters.h",
+             "toolchains.h",
+             "version.h",
+diff --git a/src/lib/corelib/tools/tools.pri b/src/lib/corelib/tools/tools.pri
+index 9db30664f..bb3a55f12 100644
+--- a/src/lib/corelib/tools/tools.pri
++++ b/src/lib/corelib/tools/tools.pri
+@@ -131,6 +131,7 @@ osx {
+         $$PWD/qbs_export.h \
+         $$PWD/settings.h \
+         $$PWD/settingsmodel.h \
++        $$PWD/settingsrepresentation.h \
+         $$PWD/setupprojectparameters.h \
+         $$PWD/toolchains.h \
+         $$PWD/version.h

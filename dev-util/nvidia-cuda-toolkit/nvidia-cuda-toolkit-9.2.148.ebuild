@@ -1,4 +1,4 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -6,22 +6,20 @@ EAPI=6
 inherit check-reqs cuda toolchain-funcs unpacker versionator
 
 MYD=$(get_version_component_range 1-2)
-DRIVER_PV="384.81"
-
-VERSION_CATEGORY="Prod"
+DRIVER_PV="396.37"
 
 DESCRIPTION="NVIDIA CUDA Toolkit (compiler and friends)"
 HOMEPAGE="https://developer.nvidia.com/cuda-zone"
-SRC_URI="https://developer.nvidia.com/compute/cuda/${MYD}/${VERSION_CATEGORY}/local_installers/cuda_${PV}_${DRIVER_PV}_linux-run -> cuda_${PV}_${DRIVER_PV}_linux.run"
-SLOT="0/${PV}"
+SRC_URI="https://developer.nvidia.com/compute/cuda/${MYD}/Prod2/local_installers/cuda_${PV}_${DRIVER_PV}_linux -> cuda_${PV}_${DRIVER_PV}_linux.run"
+
 LICENSE="NVIDIA-CUDA"
+SLOT="0/${PV}"
 KEYWORDS="-* ~amd64 ~amd64-linux"
 IUSE="debugger doc eclipse profiler"
 
 DEPEND=""
 RDEPEND="${DEPEND}
-	>=sys-devel/gcc-4.7[cxx]
-	<sys-devel/gcc-7[cxx]
+	<sys-devel/gcc-8[cxx]
 	>=x11-drivers/nvidia-drivers-${DRIVER_PV}[X,uvm]
 	debugger? (
 		sys-libs/libtermcap-compat
@@ -49,7 +47,7 @@ src_unpack() {
 src_prepare() {
 	local cuda_supported_gcc
 
-	cuda_supported_gcc="4.9 5.3 5.4 6.3 6.4"
+	cuda_supported_gcc="4.7 4.8 4.9 5.3 5.4 6.3 6.4 7.2 7.3"
 
 	sed \
 		-e "s:CUDA_SUPPORTED_GCC:${cuda_supported_gcc}:g" \

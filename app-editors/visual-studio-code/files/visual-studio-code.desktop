@@ -1,8 +1,19 @@
 [Desktop Entry]
 Name=Visual Studio Code
-Type=Application
-Comment=Multiplatform Visual Studio Code from Microsoft
+Comment=Code Editing. Redefined.
+GenericName=Text Editor
 Exec=visual-studio-code %F
 TryExec=visual-studio-code
 Icon=visual-studio-code
-Categories=Development;IDE;
+Type=Application
+StartupNotify=true
+StartupWMClass=@@NAME_SHORT@@
+Categories=Utility;TextEditor;Development;IDE;
+MimeType=text/plain;inode/directory;
+Actions=new-empty-window;
+Keywords=vscode;
+
+[Desktop Action new-empty-window]
+Name=New Empty Window
+Exec=visual-studio-code --new-window %F
+Icon=visual-studio-code

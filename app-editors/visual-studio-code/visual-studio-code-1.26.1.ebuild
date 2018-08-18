@@ -32,7 +32,7 @@ RDEPEND="
 	${DEPEND}
 	x11-libs/libnotify
 	x11-libs/libXScrnSaver
-	>=dev-lib/nss-3.26
+	>=dev-libs/nss-3.26
 	libsecret? ( app-crypt/libsecret[crypt] )
 "
 

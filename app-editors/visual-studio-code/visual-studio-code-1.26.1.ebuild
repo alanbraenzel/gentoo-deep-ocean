@@ -21,17 +21,18 @@ IUSE="libsecret"
 
 DEPEND="
 	>=media-libs/libpng-1.2.46
-	>=x11-libs/gtk+-2.24.8-r1:2
+	>=x11-libs/gtk+-3.10.0
 	x11-libs/cairo
 	gnome-base/gconf
 	x11-libs/libXtst
+	x11-libs/libxkbfile
 "
 
 RDEPEND="
 	${DEPEND}
 	x11-libs/libnotify
 	x11-libs/libXScrnSaver
-	dev-libs/nss
+	>=dev-lib/nss-3.26
 	libsecret? ( app-crypt/libsecret[crypt] )
 "
 

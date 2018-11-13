@@ -1,14 +1,14 @@
 # Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 DISTUTILS_OPTIONAL=1
-PYTHON_COMPAT=( python2_7 python3_{5,6} )
+PYTHON_COMPAT=( python2_7 python{3_5,3_6} )
 MY_PV=${PV/_rc/-rc}
 MY_P=${PN}-${MY_PV}
 
-inherit check-reqs cuda distutils-r1 eapi7-ver multiprocessing toolchain-funcs
+inherit check-reqs cuda distutils-r1 multiprocessing toolchain-funcs
 
 DESCRIPTION="Computation framework using data flow graphs for scalable machine learning"
 HOMEPAGE="https://www.tensorflow.org/"
@@ -16,7 +16,7 @@ HOMEPAGE="https://www.tensorflow.org/"
 LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="~amd64"
-IUSE="cuda jemalloc mpi +python system-libs"
+IUSE="cuda jemalloc mpi +python +system-libs"
 CPU_USE_FLAGS_X86="sse sse2 sse3 sse4_1 sse4_2 avx avx2 fma3 fma4"
 for i in $CPU_USE_FLAGS_X86; do
 	IUSE+=" cpu_flags_x86_$i"
@@ -26,103 +26,94 @@ done
 bazel_external_uris="
 	http://www.kurims.kyoto-u.ac.jp/~ooura/fft.tgz -> oourafft-20061228.tgz
 	https://bitbucket.org/eigen/eigen/get/fd6845384b86.tar.gz -> eigen-fd6845384b86.tar.gz
-	https://github.com/abseil/abseil-cpp/archive/9613678332c976568272c8f4a78631a29159271d.tar.gz -> abseil-cpp-9613678332c976568272c8f4a78631a29159271d.tar.gz
+	https://github.com/abseil/abseil-cpp/archive/48cd2c3f351ff188bc85684b84a91b6e6d17d896.tar.gz -> abseil-cpp-48cd2c3f351ff188bc85684b84a91b6e6d17d896.tar.gz
 	https://github.com/bazelbuild/rules_closure/archive/dbb96841cc0a5fb2664c37822803b06dab20c7d1.tar.gz -> bazelbuild-rules_closure-dbb96841cc0a5fb2664c37822803b06dab20c7d1.tar.gz
 	https://github.com/google/double-conversion/archive/3992066a95b823efc8ccc1baf82a1cfc73f6e9b8.zip -> double-conversion-3992066a95b823efc8ccc1baf82a1cfc73f6e9b8.zip
 	https://github.com/google/farmhash/archive/816a4ae622e964763ca0862d9dbd19324a1eaf45.tar.gz -> farmhash-816a4ae622e964763ca0862d9dbd19324a1eaf45.tar.gz
 	https://github.com/google/gemmlowp/archive/38ebac7b059e84692f53e5938f97a9943c120d98.zip -> gemmlowp-38ebac7b059e84692f53e5938f97a9943c120d98.zip
 	https://github.com/google/highwayhash/archive/fd3d9af80465e4383162e4a7c5e2f406e82dd968.tar.gz -> highwayhash-fd3d9af80465e4383162e4a7c5e2f406e82dd968.tar.gz
-	https://github.com/google/nsync/archive/0559ce013feac8db639ee1bf776aca0325d28777.tar.gz -> nsync-0559ce013feac8db639ee1bf776aca0325d28777.tar.gz
-	https://github.com/google/protobuf/archive/396336eb961b75f03b25824fe86cf6490fb75e3a.tar.gz -> protobuf-396336eb961b75f03b25824fe86cf6490fb75e3a.tar.gz
-	https://github.com/open-source-parsers/jsoncpp/archive/11086dd6a7eba04289944367ca82cea71299ed70.tar.gz -> jsoncpp-11086dd6a7eba04289944367ca82cea71299ed70.tar.gz
-	https://github.com/jemalloc/jemalloc/archive/4.4.0.tar.gz -> jemalloc-4.4.0.tar.gz
-	cuda? ( https://github.com/nvidia/nccl/archive/03d856977ecbaac87e598c0c4bafca96761b9ac7.tar.gz -> nvidia-nccl-03d856977ecbaac87e598c0c4bafca96761b9ac7.tar.gz )
-	python? (
+	cuda? (
+		https://github.com/nvidia/nccl/archive/03d856977ecbaac87e598c0c4bafca96761b9ac7.tar.gz -> nvidia-nccl-03d856977ecbaac87e598c0c4bafca96761b9ac7.tar.gz
 		https://github.com/NVlabs/cub/archive/1.8.0.zip -> cub-1.8.0.zip
-		https://github.com/abseil/abseil-py/archive/ea8c4d2ddbf3fba610c4d613260561699b776db8.tar.gz -> abseil-py-ea8c4d2ddbf3fba610c4d613260561699b776db8.tar.gz
-		https://github.com/aws/aws-sdk-cpp/archive/1.3.15.tar.gz -> aws_sdk_cpp-1.3.15.tar.gz
-		https://github.com/edenhill/librdkafka/archive/v0.11.1.tar.gz -> librdkafka-v0.11.1.tar.gz
-		https://github.com/google/boringssl/archive/a0fb951d2a26a8ee746b52f3ba81ab011a0af778.tar.gz -> boringssl-a0fb951d2a26a8ee746b52f3ba81ab011a0af778.tar.gz
-		https://github.com/googleapis/googleapis/archive/f81082ea1e2f85c43649bee26e0d9871d4b41cdb.zip -> googleapis-f81082ea1e2f85c43649bee26e0d9871d4b41cdb.zip
-		https://github.com/GoogleCloudPlatform/google-cloud-cpp/archive/53f822805e77ea7715f5b52c592a162c515c7219.tar.gz -> google-cloud-cpp-53f822805e77ea7715f5b52c592a162c515c7219.tar.gz
-		https://github.com/hfp/libxsmm/archive/1.8.1.tar.gz -> libxsmm-1.8.1.tar.gz
+	)
+	python? (
 		https://github.com/intel/ARM_NEON_2_x86_SSE/archive/0f77d9d182265259b135dad949230ecbf1a2633d.tar.gz -> ARM_NEON_2_x86_SSE-0f77d9d182265259b135dad949230ecbf1a2633d.tar.gz
-		https://github.com/intel/mkl-dnn/archive/v0.12.tar.gz -> mkl_dnn-v0.12.tar.gz
-		https://github.com/llvm-mirror/llvm/archive/bf13d093f13a295d71080614c3036ada591201d5.tar.gz -> llvm-bf13d093f13a295d71080614c3036ada591201d5.tar.gz
 		https://mirror.bazel.build/docs.python.org/2.7/_sources/license.txt -> tensorflow-python-license.txt
-		https://pypi.python.org/packages/5c/78/ff794fcae2ce8aa6323e789d1f8b3b7765f601e7702726f430e814822b96/gast-0.2.0.tar.gz
 		https://pypi.python.org/packages/bc/cc/3cdb0a02e7e96f6c70bd971bc8a90b8463fda83e264fa9c5c1c98ceabd81/backports.weakref-1.0rc1.tar.gz
 		!system-libs? (
-			http://ftp.exim.org/pub/pcre/pcre-8.39.tar.gz
-			http://ufpr.dl.sourceforge.net/project/swig/swig/swig-3.0.8/swig-3.0.8.tar.gz
-			https://curl.haxx.se/download/curl-7.49.1.tar.gz
-			https://pypi.python.org/packages/8a/48/a76be51647d0eb9f10e2a4511bf3ffb8cc1e6b14e9e4fab46173aa79f981/termcolor-1.1.0.tar.gz
-			https://pypi.python.org/packages/d8/be/c4276b3199ec3feee2a88bc64810fbea8f26d961e0a4cd9c68387a9f35de/astor-0.6.2.tar.gz
-			https://pypi.python.org/packages/source/s/six/six-1.10.0.tar.gz
-			https://github.com/google/flatbuffers/archive/971a68110e4fc1bace10fcb6deeb189e7e1a34ce.tar.gz -> flatbuffers-971a68110e4fc1bace10fcb6deeb189e7e1a34ce.tar.gz
-			https://github.com/cython/cython/archive/3732784c45cfb040a5b0936951d196f83a12ea17.tar.gz -> cython-3732784c45cfb040a5b0936951d196f83a12ea17.tar.gz
+			https://github.com/abseil/abseil-py/archive/pypi-v0.2.2.tar.gz -> abseil-py-0.2.2.tar.gz
+			https://github.com/googleapis/googleapis/archive/f81082ea1e2f85c43649bee26e0d9871d4b41cdb.zip -> googleapis-f81082ea1e2f85c43649bee26e0d9871d4b41cdb.zip
+			https://github.com/GoogleCloudPlatform/google-cloud-cpp/archive/14760a86c4ffab9943b476305c4fe927ad95db1c.tar.gz -> google-cloud-cpp-14760a86c4ffab9943b476305c4fe927ad95db1c.tar.gz
+			https://github.com/google/boringssl/archive/7f634429a04abc48e2eb041c81c5235816c96514.tar.gz -> boringssl-7f634429a04abc48e2eb041c81c5235816c96514.tar.gz
+			https://pypi.python.org/packages/5c/78/ff794fcae2ce8aa6323e789d1f8b3b7765f601e7702726f430e814822b96/gast-0.2.0.tar.gz
 		)
 	)
 	!system-libs? (
-		http://pilotfiber.dl.sourceforge.net/project/giflib/giflib-5.1.4.tar.gz
-		http://pkgs.fedoraproject.org/repo/pkgs/nasm/nasm-2.12.02.tar.bz2/d15843c3fb7db39af80571ee27ec6fad/nasm-2.12.02.tar.bz2
-		https://github.com/LMDB/lmdb/archive/LMDB_0.9.19.tar.gz
-		https://github.com/glennrp/libpng/archive/v1.6.34.tar.gz -> libpng-v1.6.34.tar.gz
-		https://github.com/google/re2/archive/26cd968b735e227361c9703683266f01e5df7857.tar.gz -> re2-26cd968b735e227361c9703683266f01e5df7857.tar.gz
-		https://github.com/google/snappy/archive/1.1.7.tar.gz -> snappy-1.1.7.tar.gz
-		https://github.com/grpc/grpc/archive/d184fa229d75d336aedea0041bd59cb93e7e267f.tar.gz -> grpc-d184fa229d75d336aedea0041bd59cb93e7e267f.tar.gz
-		https://github.com/libjpeg-turbo/libjpeg-turbo/archive/1.5.3.tar.gz -> libjpeg_turbo-1.5.3.tar.gz
-		https://www.sqlite.org/2018/sqlite-amalgamation-3230100.zip
-		https://zlib.net/zlib-1.2.11.tar.gz
+		https://github.com/google/protobuf/archive/v3.6.0.tar.gz -> protobuf-3.6.0.tar.gz
 	)"
 
 SRC_URI="https://github.com/${PN}/${PN}/archive/v${MY_PV}.tar.gz -> ${P}.tar.gz
-		https://dev.gentoo.org/~perfinion/patches/tensorflow-patches-${PVR}.tar.bz2
 		${bazel_external_uris}"
 
 RDEPEND="
+	app-arch/snappy
+	dev-db/lmdb
+	dev-db/sqlite
+	>=dev-libs/jsoncpp-1.8.4
+	dev-libs/libpcre
+	dev-libs/nsync
+	>=dev-libs/protobuf-3.6.0
+	>=dev-libs/re2-0.2018.04.01
+	media-libs/giflib
+	media-libs/libjpeg-turbo
+	media-libs/libpng:0
+	>=net-libs/grpc-1.13.0
+	net-misc/curl
+	sys-libs/zlib
 	cuda? (
 		>=dev-util/nvidia-cuda-toolkit-8.0[profiler]
 		>=dev-libs/cudnn-6.0
 	)
+	jemalloc? ( >=dev-libs/jemalloc-4.4.0 )
 	mpi? ( virtual/mpi )
-	system-libs? (
-		app-arch/snappy
-		dev-db/lmdb
-		dev-db/sqlite
+	python? (
+		${PYTHON_DEPS}
 		>=dev-libs/flatbuffers-1.8.0
-		>=dev-libs/jsoncpp-1.8.4
-		dev-libs/libpcre
-		>=dev-libs/protobuf-3.6.0
-		>=dev-libs/re2-0.2018.04.01
-		media-libs/giflib
-		media-libs/libjpeg-turbo
-		media-libs/libpng:0
-		>=net-libs/grpc-1.12.1[${PYTHON_USEDEP}]
-		net-misc/curl
-		sys-libs/zlib
-		jemalloc? ( >=dev-libs/jemalloc-4.4.0 )
-		python? (
-			${PYTHON_DEPS}
-			dev-python/absl-py[${PYTHON_USEDEP}]
-			dev-python/astor[${PYTHON_USEDEP}]
-			dev-python/numpy[${PYTHON_USEDEP}]
-			>=dev-python/protobuf-python-3.6.0[${PYTHON_USEDEP}]
-			dev-python/six[${PYTHON_USEDEP}]
-			dev-python/termcolor[${PYTHON_USEDEP}]
-			virtual/python-enum34[${PYTHON_USEDEP}]
+		dev-python/absl-py[${PYTHON_USEDEP}]
+		dev-python/astor[${PYTHON_USEDEP}]
+		dev-python/gast[${PYTHON_USEDEP}]
+		dev-python/numpy[${PYTHON_USEDEP}]
+		>=dev-python/protobuf-python-3.6.0[${PYTHON_USEDEP}]
+		dev-python/six[${PYTHON_USEDEP}]
+		dev-python/termcolor[${PYTHON_USEDEP}]
+		>=net-libs/grpc-1.13.0[python,${PYTHON_USEDEP}]
+		>=sci-libs/keras-applications-1.0.5[${PYTHON_USEDEP}]
+		>=sci-libs/keras-preprocessing-1.0.3[${PYTHON_USEDEP}]
+		>=sci-visualization/tensorboard-${PV}[${PYTHON_USEDEP}]
+		virtual/python-enum34[${PYTHON_USEDEP}]
+		system-libs? (
+			net-libs/google-cloud-cpp
 		)
+	)
+	system-libs? (
+		dev-libs/openssl:0
 	)"
 DEPEND="${RDEPEND}
-	!python? ( dev-lang/python )
+	dev-python/mock"
+BDEPEND="
 	app-arch/unzip
-	>=dev-util/bazel-0.14.0
+	>=dev-libs/protobuf-3.6.0
+	>=dev-util/bazel-0.16.0
 	dev-java/java-config
 	dev-python/mock
-	system-libs? (
-		dev-lang/nasm
-		dev-lang/swig
-		dev-python/cython
+	dev-lang/swig
+	dev-python/cython
+	cuda? (
+		>=dev-util/nvidia-cuda-toolkit-8.0[profiler]
+	)
+	!python? ( dev-lang/python )
+	python? (
+		>=net-libs/grpc-1.13.0[tools]
 	)"
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
@@ -175,7 +166,7 @@ setup_bazelrc() {
 	mkdir -p "${T}/bazel-cache" || die
 	mkdir -p "${T}/bazel-distdir" || die
 
-	cat > "${T}/bazelrc" <<-EOF
+	cat > "${T}/bazelrc" <<-EOF || die
 	startup --batch
 
 	# dont strip HOME, portage sets a temp per-package dir
@@ -195,14 +186,19 @@ setup_bazelrc() {
 	test --verbose_test_summary --verbose_failures --noshow_loading_progress
 
 	# make bazel only fetch distfiles from the cache
-	fetch --repository_cache=${T}/bazel-cache/ --experimental_distdir=${T}/bazel-distdir/
-	build --repository_cache=${T}/bazel-cache/ --experimental_distdir=${T}/bazel-distdir/
+	fetch --repository_cache="${T}/bazel-cache/" --distdir="${T}/bazel-distdir/"
+	build --repository_cache="${T}/bazel-cache/" --distdir="${T}/bazel-distdir/"
+
+	build --define=PREFIX=${EPREFIX%/}/usr
+	build --define=LIBDIR=\$(PREFIX)/$(get_libdir)
+
 	EOF
+
+	tc-is-cross-compiler || \
+		echo "build --nodistinct_host_configuration" >> "${T}/bazelrc" || die
 }
 
 ebazel() {
-	setup_bazelrc
-
 	# Use different build folders for each multibuild variant.
 	local base_suffix="${MULTIBUILD_VARIANT+-}${MULTIBUILD_VARIANT}"
 	local output_base="${WORKDIR}/bazel-base${base_suffix}"
@@ -230,11 +226,12 @@ load_distfiles() {
 		[[ ${A} =~ ${dst} ]] || continue
 
 		if [[ "$dst" == "$src" ]]; then
-			einfo "Copying $dst to bazel distdir $src ..."
-		else
 			einfo "Copying $dst to bazel distdir ..."
+		else
+			einfo "Copying $dst to bazel distdir $src ..."
 		fi
-		cp "${DISTDIR}/${dst}" "${T}/bazel-distdir/${src}" || die
+		dst="$(readlink -f "${DISTDIR}/${dst}")"
+		ln -s "${dst}" "${T}/bazel-distdir/${src}" || die
 	done <<< "$(sed -re 's/!?[A-Za-z]+\?\s+\(\s*//g; s/\s+\)//g' <<< "${bazel_external_uris}")"
 }
 
@@ -259,11 +256,7 @@ src_prepare() {
 	default
 	use python && python_copy_sources
 
-	if use cuda; then
-		for i in /dev/nvidia*; do
-			addpredict $i
-		done
-	fi
+	use cuda && cuda_add_sandbox
 }
 
 src_configure() {
@@ -280,6 +273,7 @@ src_configure() {
 		export TF_ENABLE_XLA=0
 		export TF_NEED_GDR=0
 		export TF_NEED_VERBS=0
+		export TF_NEED_NGRAPH=0
 		export TF_NEED_OPENCL_SYCL=0
 		export TF_NEED_OPENCL=0
 		export TF_NEED_COMPUTECPP=0
@@ -305,29 +299,56 @@ src_configure() {
 			export CUDNN_INSTALL_PATH="${EPREFIX%/}/opt/cuda"
 			export GCC_HOST_COMPILER_PATH="$(cuda_gccdir)/$(tc-getCC)"
 			export TF_NCCL_VERSION="1"
-
-			TF_CUDA_VERSION="$(best_version dev-util/nvidia-cuda-toolkit)"
-			TF_CUDA_VERSION="${TF_CUDA_VERSION##*cuda-toolkit-}"
-			export TF_CUDA_VERSION="$(ver_cut 1-2 ${TF_CUDA_VERSION})"
+			export TF_CUDA_VERSION="$(cuda_toolkit_version)"
+			export TF_CUDNN_VERSION="$(cuda_cudnn_version)"
 			einfo "Setting CUDA version: $TF_CUDA_VERSION"
-
-			TF_CUDNN_VERSION="$(best_version dev-libs/cudnn)"
-			TF_CUDNN_VERSION="${TF_CUDNN_VERSION##*cudnn-}"
-			export TF_CUDNN_VERSION="$(ver_cut 1-2 ${TF_CUDNN_VERSION})"
 			einfo "Setting CUDNN version: $TF_CUDNN_VERSION"
 		fi
+
+		local SYSLIBS=(
+			astor_archive
+			com_googlesource_code_re2
+			curl
+			cython
+			flatbuffers
+			gif_archive
+			grpc
+			jemalloc
+			jpeg
+			jsoncpp_git
+			lmdb
+			nasm
+			nsync
+			org_sqlite
+			pcre
+			png_archive
+			six_archive
+			snappy
+			swig
+			termcolor_archive
+			zlib_archive
+		)
+		if use system-libs; then
+			SYSLIBS+=(
+				absl_py
+				astor_archive
+				boringssl
+				com_github_googleapis_googleapis
+				com_github_googlecloudplatform_google_cloud_cpp
+				com_google_protobuf
+				com_google_protobuf_cc
+				protobuf_archive
+				gast_archive
+			)
+		fi
+
+		export TF_SYSTEM_LIBS="${SYSLIBS[@]}"
 
 		# Only one bazelrc is read, import our one before configure sets its options
 		echo "import ${T}/bazelrc" >> ./.bazelrc
 
 		# This is not autoconf
 		./configure || die
-
-		sed -i '/strip=always/d' .tf_configure.bazelrc || die
-
-		if use system-libs; then
-			echo 'build --action_env TF_SYSTEM_LIBS="astor_archive,com_googlesource_code_re2,curl,cython,flatbuffers,gif_archive,grpc,jemalloc,jpeg,lmdb,nasm,org_sqlite,pcre,png_archive,six_archive,snappy,swig,termcolor_archive,zlib_archive"' >> .tf_configure.bazelrc || die
-		fi
 	}
 	if use python; then
 		python_foreach_impl run_in_build_dir do_configure
@@ -344,6 +365,13 @@ src_compile() {
 		local MULTIBUILD_VARIANT="${EPYTHON/./_}"
 		cd "${S}-${MULTIBUILD_VARIANT}" || die
 	fi
+
+	# fail early if anything is missing
+	ebazel build --nobuild \
+		//tensorflow:libtensorflow_framework.so \
+		//tensorflow:libtensorflow.so \
+		//tensorflow:libtensorflow_cc.so \
+		$(usex python '//tensorflow/tools/pip_package:build_pip_package' '')
 
 	ebazel build \
 		//tensorflow:libtensorflow_framework.so \
@@ -368,23 +396,19 @@ src_install() {
 		cd "${srcdir}" || die
 		esetup.py install
 
-		# Symlink to the main .so file
-		python_export PYTHON_SITEDIR
-		rm -rf "${D}/${PYTHON_SITEDIR}/${PN}/lib${PN}_framework.so" || die
-		dosym "../../../lib${PN}_framework.so" "${PYTHON_SITEDIR#${EPREFIX%/}}/${PN}/lib${PN}_framework.so" || die
-
+		# libtensorflow_framework.so is in /usr/lib already
+		python_export PYTHON_SITEDIR PYTHON_SCRIPTDIR
+		rm -f "${D}/${PYTHON_SITEDIR}/${PN}/lib${PN}_framework.so" || die
 		python_optimize
 	}
 
 	if use python; then
 		python_foreach_impl run_in_build_dir do_install
 
-		rm -f "${ED}"/usr/lib/python-exec/*/tensorboard || die "failed to remove tensorboard"
-
 		# Symlink to python-exec scripts
 		for i in "${ED}"/usr/lib/python-exec/*/*; do
 			n="${i##*/}"
-			[[ -e "${ED}/usr/bin/${n}" ]] || dosym ../lib/python-exec/python-exec2 "/usr/bin/$n"
+			[[ -e "${ED}/usr/bin/${n}" ]] || dosym ../lib/python-exec/python-exec2 "/usr/bin/${n}"
 		done
 
 		python_setup
@@ -393,23 +417,9 @@ src_install() {
 	fi
 
 	einfo "Installing headers"
-	# Install c c++ and core header files
-	for i in $(find ${PN}/{c,cc,core} -name "*.h"); do
-		insinto /usr/include/${PN}/${i%/*}
-		doins ${i}
-	done
-
-	einfo "Installing generated headers"
-	for i in $(find bazel-genfiles/${PN}/{cc,core} -name "*.h"); do
-		j=${i#bazel-genfiles/}
-		insinto /usr/include/${PN}/${j%/*}
-		doins ${i}
-	done
-
-	einfo "Installing Eigen headers"
-	ebazel build //third_party/eigen3:install_eigen_headers
+	ebazel build //tensorflow:install_headers
 	insinto /usr/include/${PN}/
-	doins -r bazel-genfiles/third_party/eigen3/include/*
+	doins -r bazel-genfiles/tensorflow/include/*
 
 	einfo "Installing libs"
 	# Generate pkg-config file

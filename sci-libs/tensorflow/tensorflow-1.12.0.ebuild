@@ -242,7 +242,6 @@ pkg_setup() {
 src_unpack() {
 	# Only unpack the main distfile
 	unpack "${P}.tar.gz"
-	unpack tensorflow-patches-${PVR}.tar.bz2
 }
 
 src_prepare() {
@@ -250,8 +249,6 @@ src_prepare() {
 
 	setup_bazelrc
 	load_distfiles
-
-	eapply "${WORKDIR}"/patches/*.patch
 
 	default
 	use python && python_copy_sources
